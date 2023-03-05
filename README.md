@@ -1,5 +1,7 @@
 #   `%opal`
 
+**wip ~2023.3.5**
+
 %opal detects the state of an agent and adds standard peek endpoints:
 
 ```
