@@ -2,11 +2,13 @@
 
 ![Opals of the world](https://cdn.shopify.com/s/files/1/0212/8956/6308/files/opals_of_the_world_480x480.jpg?v=1626533597)
 
-**abandoned ~2023.3.20**
+**wip ~2023.3.20**
 
-current status:  impossible to finish due to `agent:gall` being contravariant
+current status:  difficult to finish due to `agent:gall` being contravariant
 
 i.e. you can't find the names inside of the agent state because they aren't exported
+
+there are ways around this that I'm exploring now
 
 ###### wut?
 

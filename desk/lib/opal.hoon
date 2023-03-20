@@ -140,8 +140,10 @@
 ++  get-identifiers
   |=  ty=type
   ~&  >>>  ty
+  ~&  >  -.ty
   %-  flop
   |-  ^-  (list (option type))
+  ~&  >  -.ty
     ?-    ty
       %noun      ~
       %void      ~
@@ -152,10 +154,9 @@
     $(ty q.ty)
   ::
       [%core *]
+    ~&  >>>  r.p.q.ty
     %-  weld
-    :_  ?.  ?=(%gold r.p.q.ty)
-          ~
-        $(ty p.ty)
+    :_  $(ty p.ty)
     ^-  (list (option type))
     %-  zing
     %+  turn  ~(tap by q.r.q.ty)
@@ -168,6 +169,7 @@
     [name ~(play ~(et ut ty) ~[name] ~)]
   ::
       [%face *]
+      ~&  >>  ty
     ?^  p.ty
       ~
     [p.ty q.ty]~
