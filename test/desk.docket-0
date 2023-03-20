@@ -1,0 +1,9 @@
+:~
+  title+'ahoy'
+  info+'ship monitoring (example); simplified version for tutorial'
+  color+0x7a.ffff
+  version+[0 0 1]
+  website+'~'
+  license+'MIT'
+  site+/ahoy
+==
