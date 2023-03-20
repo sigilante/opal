@@ -2,8 +2,8 @@
 ::::
 ::    %opal detects the state of an agent and adds standard peek endpoints:
 ::
-::      /x        for single values
-::      /x/all    for all values in the state
+::      /x        for single values, as vase
+::      /x/all    for all values in the state, as (list term)
 ::      /y        for lists, sets, and maps
 ::
 ::    the caller must still know the return mold of the value
@@ -12,8 +12,9 @@
 ::
 ::    usage:
 ::
+::      =|  state-0
 ::      =*  state  -
-::      %~  agent:opal  *state
+::      %+  agent:opal  state-0
 ::      your-agent
 ::
 ::    example:
@@ -41,109 +42,42 @@
 ::
 |%
 ++  agent
-  |=  [state=mold =agent:gall]
+  |=  [state=type =agent:gall]
   ^-  agent:gall
-  !.
+  !:  :: TODO !. once all works correctly
   |_  =bowl:gall
   +*  this  .
       ag    ~(. agent bowl)
-      hc
   ::
-  ++  on-poke
-    |=  [=mark =vase]
-    ^-  (quip card:agent:gall agent:gall)
-    ?.  ?=(%opal mark)
-      =^  cards  agent  (on-poke:ag mark vase)
-      [cards this]
-    =/  opal
-      !<(poke vase)
-    =;  =tang
-      ((%*(. slog pri 1) tang) [~ this])
-    ?-  -.opal
-      %bowl   [(sell !>(bowl))]~
-    ::
-        %state
-      =?  grab.opal  =('' grab.opal)  '-'
-      =;  product=^vase
-        [(sell product)]~
-      =/  state=^vase
-        ::  if the underlying app has implemented a /opal/state scry endpoint,
-        ::  use that vase in place of +on-save's.
-        ::
-        =/  result=(each ^vase tang)
-          (mule |.(q:(need (need (on-peek:ag /x/opal/state)))))
-        ?:(?=(%& -.result) p.result on-save:ag)
-      %+  slap
-        (slop state !>([bowl=bowl ..zuse]))
-      (ream grab.opal)
-    ::
-        %incoming
-      =;  =tang
-        ?^  tang  tang
-        [%leaf "no matching subscriptions"]~
-      %+  murn
-        %+  sort  ~(tap by sup.bowl)
-        |=  [[* a=[=ship =path]] [* b=[=ship =path]]]
-        (aor [path ship]:a [path ship]:b)
-      |=  [=duct [=ship =path]]
-      ^-  (unit tank)
-      =;  relevant=?
-        ?.  relevant  ~
-        `>[path=path from=ship duct=duct]<
-      ?:  ?=(~ about.opal)  &
-      ?-  -.about.opal
-        %ship  =(ship ship.about.opal)
-        %path  ?=(^ (find path.about.opal path))
-        %wire  %+  lien  duct
-               |=(=wire ?=(^ (find wire.about.opal wire)))
-        %term  !!
-      ==
-    ::
-        %outgoing
-      =;  =tang
-        ?^  tang  tang
-        [%leaf "no matching subscriptions"]~
-      %+  murn
-        %+  sort  ~(tap by wex.bowl)
-        |=  [[[a=wire *] *] [[b=wire *] *]]
-        (aor a b)
-      |=  [[=wire =ship =term] [acked=? =path]]
-      ^-  (unit tank)
-      =;  relevant=?
-        ?.  relevant  ~
-        `>[wire=wire agnt=[ship term] path=path ackd=acked]<
-      ?:  ?=(~ about.opal)  &
-      ?-  -.about.opal
-        %ship  =(ship ship.about.opal)
-        %path  ?=(^ (find path.about.opal path))
-        %wire  ?=(^ (find wire.about.opal wire))
-        %term  =(term term.about.opal)
-      ==
-    ==
+  ++  on-poke    on-poke:ag
   ::
   ++  on-peek
     |=  =path
     ^-  (unit (unit cage))
+    ~&  >>>  path
+    ~&  >>  ?=([%u %opal *] path)
     ::  extract state faces and values
-    =/  state-values  (get-identifiers:hc -:!>(state))
+    =/  state-values  (get-identifiers state)
     =/  state-faces   (turn state-values |=(a=[term type] -:a))
     =/  state-types   (turn state-values |=(a=[term type] +:a))
-
+    ~&  >  state-faces
     ?+    path
         :: default fall-through
       (on-peek:ag path)
         :: %opal-specific scries
-      [%u %opal ~]                 ``noun+!>(&)
-      [%x %opal %state ~]          ``noun+!>(on-save:ag)
-      [%x %opal %subscriptions ~]  ``noun+!>([wex sup]:bowl)
-      ==
+      [%x %opal %state ~]       ``noun+!>(on-save:ag)
+      [%x %opal %peeks ~]       ``noun+!>(state-faces)
+      [%u %opal *]              ``noun+!>(&)
         ::
       [%x @ ~]
         :: value at top of state
+        ``noun+!>(on-save:ag)
       [%x @ @ ~]
         :: value inside of map, set, etc.
+        ``noun+!>(on-save:ag)
       [%x @ @ @ ~]
         :: value inside of mip if any
+        ``noun+!>(on-save:ag)
       [%x %all ~]
         :: all values
         ``noun+!>(on-save:ag)
@@ -192,11 +126,9 @@
     =^  cards  agent  (on-fail:ag term tang)
     [cards this]
   --
---
 ::
 ::  this logic was extracted from language-server/complete
 ::
-|%
 ++  option
   |$  [item]
   [term=cord detail=item]
@@ -204,15 +136,7 @@
   |=  ty=type
   %-  flop
   |-  ^-  (list (option type))
-  ?-    ty
-      %noun      ~
-      %void      ~
-      [%atom *]  ~
-      [%cell *]
-    %+  weld
-      $(ty p.ty)
-    $(ty q.ty)
-  ::
+  ?+    ty       ~
       [%core *]
     %-  weld
     :_  ?.  ?=(%gold r.p.q.ty)
@@ -229,24 +153,6 @@
     ~|  term=term
     [name ~(play ~(et ut ty) ~[name] ~)]
   ::
-      [%face *]
-    ?^  p.ty
-      ~
-    [p.ty q.ty]~
-  ::
-      [%fork *]
-    %=    $
-        ty
-      =/  tines  ~(tap in p.ty)
-      ?~  tines
-        %void
-      |-  ^-  type
-      ?~  t.tines
-        i.tines
-      (~(fuse ut $(tines t.tines)) i.tines)
-    ==
-  ::
-      [%hint *]  $(ty q.ty)
-      [%hold *]  $(ty ~(repo ut ty))
+      ::[%hold *]  $(ty ~(repo ut ty))
   ==
 --
