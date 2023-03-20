@@ -42,7 +42,7 @@
 ::
 |%
 ++  agent
-  |=  [state=type =agent:gall]
+  |=  =agent:gall
   ^-  agent:gall
   !:  :: TODO !. once all works correctly
   |_  =bowl:gall
@@ -57,10 +57,14 @@
     ~&  >>>  path
     ~&  >>  ?=([%u %opal *] path)
     ::  extract state faces and values
-    =/  state-values  (get-identifiers state)
+    =/  state  !>(on-save:ag)
+    ::~&  >  -:state
+    ~&  (get-identifiers -:state)
+    =/  state-values  (get-identifiers -:state)
     =/  state-faces   (turn state-values |=(a=[term type] -:a))
     =/  state-types   (turn state-values |=(a=[term type] +:a))
     ~&  >  state-faces
+    ~&  >>>  'here'
     ?+    path
         :: default fall-through
       (on-peek:ag path)
@@ -71,6 +75,7 @@
         ::
       [%x @ ~]
         :: value at top of state
+        ~&  >  on-save:ag
         ``noun+!>(on-save:ag)
       [%x @ @ ~]
         :: value inside of map, set, etc.
@@ -134,9 +139,18 @@
   [term=cord detail=item]
 ++  get-identifiers
   |=  ty=type
+  ~&  >>>  ty
   %-  flop
   |-  ^-  (list (option type))
-  ?+    ty       ~
+    ?-    ty
+      %noun      ~
+      %void      ~
+      [%atom *]  ~
+      [%cell *]
+    %+  weld
+      $(ty p.ty)
+    $(ty q.ty)
+  ::
       [%core *]
     %-  weld
     :_  ?.  ?=(%gold r.p.q.ty)
@@ -153,6 +167,24 @@
     ~|  term=term
     [name ~(play ~(et ut ty) ~[name] ~)]
   ::
-      ::[%hold *]  $(ty ~(repo ut ty))
+      [%face *]
+    ?^  p.ty
+      ~
+    [p.ty q.ty]~
+  ::
+      [%fork *]
+    %=    $
+        ty
+      =/  tines  ~(tap in p.ty)
+      ?~  tines
+        %void
+      |-  ^-  type
+      ?~  t.tines
+        i.tines
+      (~(fuse ut $(tines t.tines)) i.tines)
+    ==
+  ::
+      [%hint *]  $(ty q.ty)
+      [%hold *]  $(ty ~(repo ut ty))
   ==
 --

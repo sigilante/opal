@@ -2,9 +2,13 @@
 
 ![Opals of the world](https://cdn.shopify.com/s/files/1/0212/8956/6308/files/opals_of_the_world_480x480.jpg?v=1626533597)
 
-**wip ~2023.3.20**
+**abandoned ~2023.3.20**
 
-current status:  filtering on available subject faces ñ doing what I want yet
+current status:  impossible to finish due to `agent:gall` being contravariant
+
+i.e. you can't find the names inside of the agent state because they aren't exported
+
+###### wut?
 
 `%opal` detects the state of an agent and adds standard peek endpoints:
 
@@ -18,7 +22,7 @@ the caller must still know the return mold of the value
 
 `%opal` will only wrap "normal" molds:  atoms, lists, sets, maps, mops, mips; you're on your own for anything else
 
-###### usage:
+###### how?
 
 import `opal` and add this line to your agent
 
@@ -29,7 +33,7 @@ import `opal` and add this line to your agent
 your-agent
 ```
 
-###### example:
+###### huh?
 
 an agent has the following state:
 
@@ -58,7 +62,7 @@ $:  %0
 %opal %peeks      produces a list of current possible %opal endpoints
 ```
 
-###### useful bits:
+###### use?
 
 parts of `%opal` can be tested with existing cores
 
@@ -84,6 +88,8 @@ and then try
 > .^(* %gx /=ahoy=/opal/state/noun)
 
 > .^((list term) %gx /=ahoy=/opal/peeks/noun)
+
+> .^(())
 
 > (get-identifiers:opal -:!>(rs))
 ~[
