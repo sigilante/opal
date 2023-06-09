@@ -10,6 +10,8 @@ i.e. you can't find the names inside of the agent state because they aren't expo
 
 there are ways around this that I'm exploring now
 
+https://developers.urbit.org/reference/hoon/stdlib/5c#sloe
+
 ###### wut?
 
 `%opal` detects the state of an agent and adds standard peek endpoints:
